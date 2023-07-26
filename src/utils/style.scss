@@ -1,0 +1,262 @@
+@import url("https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@100;200;300;400;500;600;700;800&family=Karla:wght@200;300;400;500;600;700;800&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+$black: #000000;
+$purple: #4e4feb;
+$blue: #068fff;
+$white: #eeeeee;
+$font_anek: "Anek Devanagari", sans-serif;
+$font_karla: "Karla", sans-serif;
+$font_mont: "Montserrat", sans-serif;
+$font_roboto: "Roboto", sans-serif;
+//===============navbar
+.navigation {
+  user-select: none;
+  z-index: 9999;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background: $purple;
+  padding: 0 40px;
+}
+
+.nav-container {
+  max-width: 100vw;
+  margin: 0 auto;
+}
+
+.brand {
+  position: absolute;
+  padding-left: 20px;
+  float: left;
+  line-height: 70px;
+  text-transform: uppercase;
+  font-size: 1.4em;
+
+  a,
+  a:visited {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+
+    img {
+      width: auto;
+      margin: auto;
+      position: relative;
+      height: 50px;
+    }
+  }
+}
+
+nav {
+  float: right;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      float: left;
+      position: relative;
+      a {
+        display: block;
+        padding: 10px 20px 0 20px;
+        line-height: 50px;
+        color: white;
+        text-decoration: none;
+
+        &::before {
+          transition: 300ms;
+          height: 5px;
+          content: "";
+          position: absolute;
+          background-color: $blue;
+          width: 0%;
+          bottom: 0px;
+        }
+
+        &:hover::before {
+          width: 70%;
+        }
+      }
+      ul li {
+        min-width: 190px;
+        a {
+          padding: 15px;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+}
+
+.nav-dropdown {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-mobile {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: $purple;
+  height: 70px;
+  width: 70px;
+}
+
+@media only screen and (max-width: 700px) {
+  .nav-mobile {
+    display: block;
+  }
+  nav {
+    width: 100%;
+    padding: 70px 0 15px;
+    ul {
+      display: none;
+      width: 100vw;
+      left: -40px;
+      position: relative;
+
+      li {
+        float: none;
+
+        a {
+          padding: 15px;
+          line-height: 20px;
+          background: $purple;
+
+          &:hover::before {
+            width: 20%;
+          }
+        }
+        ul li a {
+          padding-left: 30px;
+        }
+      }
+    }
+  }
+  .nav-dropdown {
+    position: static;
+  }
+}
+
+#nav-toggle {
+  position: absolute;
+  left: 0px;
+  top: 22px;
+  cursor: pointer;
+  padding: 10px 35px 16px 0px;
+  span,
+  span:before,
+  span:after {
+    cursor: pointer;
+    border-radius: 1px;
+    height: 5px;
+    width: 24px;
+    background: $black;
+    position: absolute;
+    display: block;
+    content: "";
+    transition: all 300ms ease-in-out;
+  }
+  span:before {
+    top: -10px;
+    width: 37px;
+  }
+  span:after {
+    width: 15px;
+    bottom: -10px;
+  }
+  &.active span {
+    width: 35px;
+    background-color: transparent;
+
+    &:before,
+    &:after {
+      width: 35px;
+      top: 0;
+    }
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .nav-list {
+    display: block !important;
+  }
+}
+
+//==========content
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+
+  .home {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    background: url(../utils/back.png) !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100vw 100vh !important;
+
+    .left {
+      font-family: $font_karla;
+      line-height: 0.8;
+      color: $white;
+      h2 {
+        font-size: 60px;
+        font-weight: 800;
+      }
+      h1 {
+        font-weight: 800;
+        font-size: 80px;
+      }
+      p {
+        margin: 10px;
+        line-height: 1;
+        font-size: 30px;
+        font-family: $font_roboto;
+        color: $white;
+      }
+    }
+    .right {
+      position: relative;
+      max-width: 500px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Test from "./components/Test";
+import Nav from "./components/Nav";
+import "./utils/style.scss";
+import { useEffect, useState } from "react";
 function App() {
+  const[from, set1] = useState(null)
+  const[to, set2] = useState(null)
+  
+  useEffect(() => {
+    console.log(from, to)
+  },[from, to]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+  <Nav/>
+      <Routes>
+        <Route path="/" element={<Home set1={set1} set2={set2} />} />
+        {/* <Route path="/test" element={<Test  from={from} to={to} />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
