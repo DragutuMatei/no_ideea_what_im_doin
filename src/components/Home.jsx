@@ -19,9 +19,10 @@ function Home({ set1, set2 }) {
       format: "json",
       addessdetalis: 1,
       polygon: true,
+      polygon_geojson: 0,
     }).toString();
     console.log(after_link);
-    const link = `https://nominatim.openstreetmap.org/search?q=Tecuci&format=json&addessdetalis=1&polygon_geojson=0`;
+    const link = `https://nominatim.openstreetmap.org/search?${after_link}`;
     axios.get(link).then((res) => {
       console.log(res);
       setLocs1(res.data);
@@ -33,12 +34,12 @@ function Home({ set1, set2 }) {
       format: "json",
       addessdetalis: 1,
       polygon: true,
-      // polygon_geojson: 0,
+      polygon_geojson: 0,
     }).toString();
     //q=Tecuci&format=json&addessdetalis=1&polygon=true
     // https://nominatim.openstreetmap.org/search?q=Tecuci&format=json&addessdetalis=1&polygon=true
     const link = `https://nominatim.openstreetmap.org/search?${after_link}`;
-    axios.post(link).then((res) => {
+    axios.get(link).then((res) => {
       setLocs2(res.data);
     });
   };
@@ -102,7 +103,7 @@ function Home({ set1, set2 }) {
               })}
           </div>
         </div>
-        {!loc1 && (
+        {loc1 && (
           <div className="input_group">
             <input type="text" onChange={(e) => sv2(e.target.value)} />
             <button onClick={() => search2(val2)}>cauta a doua locatie</button>

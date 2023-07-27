@@ -114,7 +114,11 @@ const Test = ({ from, to }) => {
     const marker = L.marker([from.lat, from.lon], { icon: taxiIcon }).addTo(
       map
     );
-    const marker2 = L.marker([to.lat, to.lon], { icon: taxiIcon }).addTo(map);
+    traf.map(ta=>{
+        const mm =  L.marker([ta.location.lat, ta.location.lng], { icon: taxiIcon, }).addTo(map);
+    })
+    const marker2 = L.marker([to.lat, to.lon], { icon: taxiIcon, }).addTo(map);
+    
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(from.lat, from.lon), L.latLng(to.lat, to.lon)],
     }).addTo(map);
