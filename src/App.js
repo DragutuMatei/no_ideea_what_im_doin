@@ -9,7 +9,6 @@ function App() {
   const[to, set2] = useState(null)
   
   useEffect(() => {
-    console.log(from, to)
   },[from, to]);
   return (
     <BrowserRouter>

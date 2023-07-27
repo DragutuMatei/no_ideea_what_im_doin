@@ -329,3 +329,15 @@ input{
     left: 50%;
     transform:  translateX(-50%);
 }
+.ok{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 10px 0;
+}
+.cfr{
+    margin: 10px 0;
+    font-family: $font_mont;
+    font-family: 20px;
+    color: $black;
+}

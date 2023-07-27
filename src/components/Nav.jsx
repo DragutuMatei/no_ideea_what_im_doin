@@ -40,10 +40,7 @@ function Nav() {
           <ul className="nav-list">
             <li>
               <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/test">Test</Link>
-            </li>
+            </li> 
             {!loading && !user ? (
               <>
                 <li>

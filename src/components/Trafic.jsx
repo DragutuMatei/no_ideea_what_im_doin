@@ -6,15 +6,41 @@ import { Timestamp } from "firebase/firestore";
 const fire = new Fire();
 let poate = { lat: 0, lng: 0 };
 function Trafic({ from, to }) {
+  console.log(from, to);
   const [user, loading, error] = useAuthState(fire.getuser());
   let [data, setData] = useState({
     user: !loading && user ? user.email : "",
-    path: from && to ? `${from.toLowerCase()}-${to.toLowerCase()}`:"-",
+    path: `${from}-${to}`,
+    // from !== "" && to !== ""
+    //   ? `${from.toLowerCase()}-${to.toLowerCase()}`
+    //   : "-",
     createdAt: Timestamp.now(),
     location: { lat: 0, lng: 0 },
-  }); 
-
+  });
+  const [medie, setMedie] = useState(0);
+  const [is, setis] = useState(false);
+  const get = async () => {
+    const fromto = `${from}-${to}`;
+    console.log(fromto);
+    const a = await fire.readDocuments("trafic", ["path", "==", fromto]);
+    let me = 0;
+    if (a.length != 0) {
+      a.forEach((el, index) => {
+        let intarziat =
+          Timestamp.now().toDate().getHours() -
+          el.createdAt.toDate().getHours();
+        if (index == 0) {
+          me += intarziat;
+        } else {
+          me += intarziat;
+          me /= 2;
+        }
+        setMedie(me);
+      });
+    }
+  };
   useEffect(() => {
+    get();
     const getLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -22,7 +48,7 @@ function Trafic({ from, to }) {
             const { latitude, longitude } = position.coords;
             setData({
               user: user.email,
-              path: `${from.toLowerCase()}-${to.toLowerCase()}`,
+              path: `${from}-${to}`,
 
               createdAt: Timestamp.now(),
               location: { lat: latitude, lng: longitude },
@@ -38,16 +64,23 @@ function Trafic({ from, to }) {
     };
 
     if (!loading && user) getLocation();
-  }, []);
-
+  }, [, from, to]);
+  const roundit = (num, how) => {
+    if (!how) return Math.round(num * 100) / 100;
+    else return Math.round(num * how) / how;
+  };
   const start = async () => {
-    if (!loading && user)
+    if (!loading && user) {
+      setis(true);
       await fire.addItem("trafic", data).then((res) => {
         console.log(res);
+        alert("trafic anuntat");
       });
+    }else if(!user) alert("trebuie sa te loghezi!")
   };
   const stop = async () => {
     if (!loading && user) {
+      setis(false);
       const docc = await fire.readDocuments("trafic", [
         "user",
         "==",
@@ -57,25 +90,31 @@ function Trafic({ from, to }) {
       await fire.deleteDocument("trafic", docc[0].id).then((res) => {
         alert("trafic sters");
       });
-    }
+    }else if(!user) alert("trebuie sa te loghezi!")
+    
   };
 
   return (
     <>
-      <button
-        onClick={() => {
-          start();
-        }}
-      >
-        start trafic
-      </button>
-      <button
-        onClick={() => {
-          stop();
-        }}
-      >
-        stop trafic
-      </button>
+      {medie > 0 && <h2 className="cfr">Aprox. {roundit(medie,1)}h de intarziere</h2>}
+      <div className="ok">
+        {!is && (
+          <button
+            onClick={() => {
+              start();
+            }}
+          >
+            start trafic
+          </button>
+        )}
+        <button
+          onClick={() => {
+            stop();
+          }}
+        >
+          stop trafic
+        </button>
+      </div>
     </>
   );
 }

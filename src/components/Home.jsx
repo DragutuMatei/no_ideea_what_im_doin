@@ -4,8 +4,11 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Test from "./Test";
 import Trafic from "./Trafic";
-
+import { useAuthState } from "react-firebase-hooks/auth";
+import Fire from "../utils/Fire";
+const fire = new Fire();
 function Home({ set1, set2 }) {
+  const [user, loading, error] = useAuthState(fire.getuser());
   const [loc1, setLoc1] = useState(null);
   const [locs1, setLocs1] = useState(null);
   const [loc2, setLoc2] = useState(null);
@@ -54,6 +57,9 @@ function Home({ set1, set2 }) {
     AOS.init();
   }, []);
   const restet = () => {
+    document.querySelectorAll("input").forEach(input=>{
+      input.value = "";
+    })
     setLoc1(null);
     setLoc2(null);
     setGata(false);
@@ -126,11 +132,13 @@ function Home({ set1, set2 }) {
         <button onClick={search}>Search</button>
         <button onClick={restet}>Reset</button>
       </div>
-      <Trafic from={loc1} to={loc2} />
 
       {gata && (
         <>
           <Test from={loc1} to={loc2} />
+          {user && !loading && (
+            <Trafic from={loc1?.display_name} to={loc2?.display_name} />
+          )}
         </>
       )}
     </div>
