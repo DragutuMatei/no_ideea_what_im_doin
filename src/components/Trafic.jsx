@@ -25,17 +25,27 @@ function Trafic({ from, to }) {
     const a = await fire.readDocuments("trafic", ["path", "==", fromto]);
     let me = 0;
     if (a.length != 0) {
-      a.forEach((el, index) => {
-        let intarziat =
-          Timestamp.now().toDate().getHours() -
-          el.createdAt.toDate().getHours();
-        if (index == 0) {
-          me += intarziat;
+      a.forEach(async (el, index) => {
+
+        //AR TRB SA FIE < DAR NU VR SA PIERD DATELE
+        if (Timestamp.now().toDate() - el.createdAt.toDate() > 15 * 60 * 1000) {
+          let intarziat =
+            Timestamp.now().toDate().getHours() -
+            el.createdAt.toDate().getHours();
+          if (index == 0) {
+            me += intarziat;
+          } else {
+            me += intarziat;
+            me /= 2;
+          }
+          setMedie(me);
         } else {
-          me += intarziat;
-          me /= 2;
+          setis(false)
+          // await fire.deleteDocument("trafic", el.id).then(res=>{
+          //   console.log(res);
+          // })
+          console.log("S-AU STERS! AYAYE:)");
         }
-        setMedie(me);
       });
     }
   };
@@ -49,7 +59,6 @@ function Trafic({ from, to }) {
             setData({
               user: user.email,
               path: `${from}-${to}`,
-
               createdAt: Timestamp.now(),
               location: { lat: latitude, lng: longitude },
             });
@@ -76,7 +85,7 @@ function Trafic({ from, to }) {
         console.log(res);
         alert("trafic anuntat");
       });
-    }else if(!user) alert("trebuie sa te loghezi!")
+    } else if (!user) alert("trebuie sa te loghezi!");
   };
   const stop = async () => {
     if (!loading && user) {
@@ -90,13 +99,14 @@ function Trafic({ from, to }) {
       await fire.deleteDocument("trafic", docc[0].id).then((res) => {
         alert("trafic sters");
       });
-    }else if(!user) alert("trebuie sa te loghezi!")
-    
+    } else if (!user) alert("trebuie sa te loghezi!");
   };
 
   return (
     <>
-      {medie > 0 && <h2 className="cfr">Aprox. {roundit(medie,1)}h de intarziere</h2>}
+      {medie > 0 && (
+        <h2 className="cfr">Aprox. {roundit(medie, 1)}h de intarziere</h2>
+      )}
       <div className="ok">
         {!is && (
           <button

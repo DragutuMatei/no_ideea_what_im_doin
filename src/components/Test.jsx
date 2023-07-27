@@ -1,85 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import L from "leaflet";
-// import "leaflet-routing-machine";
-// import "leaflet/dist/leaflet.css";
-// import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-
-// const Test = ({ from, to }) => {
-//   console.log(from, to);
-//   useEffect(() => {
-//     const map = L.map("map").setView([from.lat, from.lon], 11);
-//     const mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
-//     L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-//       attribution: "Leaflet &copy; " + mapLink + ", contribution",
-//       maxZoom: 18,
-//     }).addTo(map);
-
-//     const taxiIcon = L.icon({
-//       iconUrl:
-//         "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
-//       iconSize: [70, 70],
-//     });
-
-//     const marker = L.marker([from.lat, from.lon], { icon: taxiIcon }).addTo(
-//       map
-//     );
-//     const marker2 = L.marker([to.lat, to.lon], { icon: taxiIcon }).addTo(map);
-
-//     L.Routing.control({
-//       waypoints: [L.latLng(from.lat, from.lon), L.latLng(to.lat, to.lon)],
-//     })
-//       .on("routesfound", function (e) {
-//         var route = e.route;
-//       })
-//       .addTo(map);
-
-//     // map.on("locationfound", function (e) {
-//     // //   console.log(e);
-//     // //   var newMarker = L.marker([
-//     // //     e.latlng.lat,
-//     // //     e.latlng.lng,
-//     // //     {
-//     // //       icon: L.icon({
-//     // //         iconUrl:
-//     // //           "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
-//     // //         iconSize: [70, 70],
-//     // //       }),
-//     // //     },
-//     // //   ]).addTo(map);
-//     //   L.Routing.control({
-//     //     waypoints: [L.latLng(from.lat, from.lon), L.latLng(to.lat, to.lon)],
-//     //   })
-//     //     .on("routesfound", function (e) {
-//     //       var routes = e.routes;
-//     //       console.log(routes);
-
-//     //     //   e.routes[0].coordinates.forEach(function (coord, index) {
-//     //     //     setTimeout(function () {
-//     //     //       marker.setLatLng([coord.lat, coord.lng]);
-//     //     //     }, 100 * index);
-//     //     //   });
-//     //     })
-//     //     .addTo(map);
-//     // });
-
-//     // Clean up when the component is unmounted
-//     return () => {
-//       map.off();
-//       map.remove();
-//     };
-//   }, []);
-//   useEffect(() => {
-//     console.log(from, to);
-//   }, []);
-//   return (
-//     <div
-//       id="map"
-//       style={{ width: "100vw", height: "calc(100vh - 100px)", marginTop: 100 }}
-//     ></div>
-//   );
-// };
-
-// export default Test;
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet-routing-machine";
@@ -87,9 +5,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import axios from "axios";
 import Fire from "../utils/Fire";
-
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { data } from "jquery";
 
 const fire = new Fire();
 const Test = ({ from, to }) => {
@@ -97,12 +13,6 @@ const Test = ({ from, to }) => {
 
   const traf = useRef(null);
   console.log(from, to);
-  const get = async () => {
-    const fromto = `${from?.display_name}-${to?.display_name}`;
-    console.log(fromto);
-    // traf.current = await fire.readDocuments("trafic", ["path", "==", fromto]);
-    // setTraf(old=>old=a);
-  };
 
   useEffect(() => {
     const q = query(
@@ -122,7 +32,6 @@ const Test = ({ from, to }) => {
       console.log("okkk", ok);
       setFail(ok);
     });
-    get();
   }, [, from, to]);
 
   useEffect(() => {
@@ -132,45 +41,58 @@ const Test = ({ from, to }) => {
       attribution: "Leaflet &copy; " + mapLink + ", contribution",
       maxZoom: 15,
     }).addTo(map);
-    get();
 
-    const taxiIcon = L.icon({
+    const Icon = L.icon({
       iconUrl:
         "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
       iconSize: [70, 70],
     });
     console.log("traf:", traf);
-  
-    const fromto = `${from?.display_name}-${to?.display_name}`;
 
     fail.forEach((ta) => {
       console.log([ta.location.lat, ta.location.lng]);
+
       try {
         L.marker([ta.location.lat, ta.location.lng], {
           icon: L.icon({
-            iconUrl: "https://cdn-icons-png.flaticon.com/512/4463/4463660.png",
-            iconSize: [50, 50],
+            iconUrl:
+              "./masina.png",
+            iconSize: [30, 40],
           }),
         }).addTo(map);
       } catch (error) {
         console.log(error);
       }
-    });  const marker = L.marker([from.lat, from.lon], { icon: taxiIcon }).addTo(
-      map
-    );
-    const marker2 = L.marker([to.lat, to.lon], { icon: taxiIcon }).addTo(map);
-
-    // console.log(traf.current);
-    // traf.current.map((ta) => {
-    //   console.log([ta.location.lat, ta.location.lng]);
-    //   L.marker([ta.location.lat, ta.location.lng], {
-    //     icon: taxiIcon,
-    //   }).addTo(map);
-    // });
+    });
+    const marker = L.marker([from.lat, from.lon], { icon: Icon }).addTo(map);
+    const marker2 = L.marker([to.lat, to.lon], { icon: Icon }).addTo(map);
 
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(from.lat, from.lon), L.latLng(to.lat, to.lon)],
     }).addTo(map);
+
+    // const points = [
+    //   [1, 2],
+    //   [2, 3],
+    //   [3, 4],
+    //   [8, 9],
+    //   [9, 10],
+    //   [10, 11],
+    // ];
+
+    const points = fail.map(f=>{
+        return [f.location.lat, f.location.lng]
+    })
+
+    const numberOfClusters = 2;
+    const clusters = kMeans(points, numberOfClusters);
+    console.log("lusters", clusters);
+
+    clusters.forEach(e=>{
+        e.forEach(s=>{
+            L.circle([s[0], s[1]], 100).addTo(map);
+        })
+    })
 
     return () => {
       if (routingControl) {
@@ -180,6 +102,65 @@ const Test = ({ from, to }) => {
       map.remove();
     };
   }, [, from, to, fail]);
+
+  function distance(point1, point2) {
+    const [x1, y1] = point1;
+    const [x2, y2] = point2;
+    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+  }
+
+  function assignPointsToClusters(points, centroids) {
+    const clusters = new Array(centroids.length).fill().map(() => []);
+
+    for (const point of points) {
+      let minDistance = Infinity;
+      let clusterIndex = -1;
+
+      for (let i = 0; i < centroids.length; i++) {
+        const centroid = centroids[i];
+        const dist = distance(point, centroid);
+
+        if (dist < minDistance) {
+          minDistance = dist;
+          clusterIndex = i;
+        }
+      }
+
+      clusters[clusterIndex].push(point);
+    }
+
+    return clusters;
+  }
+
+  function calculateCentroids(clusters) {
+    return clusters.map((cluster) => {
+      const sumX = cluster.reduce((acc, point) => acc + point[0], 0);
+      const sumY = cluster.reduce((acc, point) => acc + point[1], 0);
+      const meanX = sumX / cluster.length;
+      const meanY = sumY / cluster.length;
+      return [meanX, meanY];
+    });
+  }
+
+  function kMeans(points, k, maxIterations = 100) {
+    let centroids = points.slice(0, k); // Initialize centroids with the first k points
+    let iteration = 0;
+
+    while (iteration < maxIterations) {
+      const clusters = assignPointsToClusters(points, centroids);
+      const newCentroids = calculateCentroids(clusters);
+
+      // Check for convergence
+      if (JSON.stringify(newCentroids) === JSON.stringify(centroids)) {
+        break;
+      }
+
+      centroids = newCentroids;
+      iteration++;
+    }
+
+    return assignPointsToClusters(points, centroids);
+  }
 
   return (
     <>

@@ -48,18 +48,20 @@ function Home({ set1, set2 }) {
   };
   const search = () => {
     console.log(loc1, loc2);
-    set1(loc1);
-    set2(loc2);
-    setGata(true);
+    if (loc1 && loc2) {
+      set1(loc1);
+      set2(loc2);
+      setGata(true);
+    }
   };
 
   useEffect(() => {
     AOS.init();
   }, []);
   const restet = () => {
-    document.querySelectorAll("input").forEach(input=>{
+    document.querySelectorAll("input").forEach((input) => {
       input.value = "";
-    })
+    });
     setLoc1(null);
     setLoc2(null);
     setGata(false);
@@ -110,7 +112,7 @@ function Home({ set1, set2 }) {
           </div>
         </div>
         {loc1 && (
-          <div className="input_group">
+          <div className="input_group" style={{width: "100%",maxWidth: "532px"}}>
             <input type="text" onChange={(e) => sv2(e.target.value)} />
             <button onClick={() => search2(val2)}>cauta a doua locatie</button>
             <div className="maps">
