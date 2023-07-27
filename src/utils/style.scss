@@ -254,9 +254,16 @@ body {
     .right {
       position: relative;
       max-width: 500px;
+      padding: 30px;
       img {
         width: 100%;
       }
     }
   }
+}
+
+@media screen and (max-width:830px) {
+    .main .home{
+        padding-top: 100px;
+    }
 }

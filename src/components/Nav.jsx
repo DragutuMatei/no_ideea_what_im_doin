@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 import $ from "jquery";
 import useWindowSize from "../utils/WindowSize";
-
+import Fire from "../utils/Fire";
+const fire = new Fire();
 function Nav() {
+  const [user, loading, error] = useAuthState(fire.getuser());
   const nav = useRef(null);
 
   const size = useWindowSize();
@@ -11,6 +14,14 @@ function Nav() {
     $("nav ul").slideToggle();
     nav.current.classList.toggle("active");
   };
+  const signInWithGoogle = async () => {
+    await fire.signInWithGoogle();
+  };
+
+  const logout = async () => {
+    await fire.logout();
+  };
+
 
   return (
     <section className="navigation">
@@ -33,21 +44,26 @@ function Nav() {
             <li>
               <Link to="/test">Test</Link>
             </li>
-            <li>
-              <Link to="/despre">Despre</Link>
-            </li>
-            <li>
-              <Link to="/shop/all">Shop</Link>
-            </li>
-            <li>
-              <Link to="/apps">Apps</Link>
-            </li>
-            <li>
-              <Link to="/team">Team</Link>
-            </li>
-            <li>
-              <Link to="/sponsors">Sponsors</Link>
-            </li>
+            {!loading && !user ? (
+              <>
+                <li>
+                  <a href="#" onClick={signInWithGoogle}>
+                    Login
+                  </a>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <a href="#">{user && user.displayName}</a>
+                </li>
+                <li>
+                  <a href="#" onClick={logout}>
+                    Logout
+                  </a>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

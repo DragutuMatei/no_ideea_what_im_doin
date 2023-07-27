@@ -3,6 +3,7 @@ import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Test from "./Test";
+import Trafic from "./Trafic";
 
 function Home({ set1, set2 }) {
   const [loc1, setLoc1] = useState(null);
@@ -10,7 +11,8 @@ function Home({ set1, set2 }) {
   const [loc2, setLoc2] = useState(null);
   const [locs2, setLocs2] = useState(null);
   const [gata, setGata] = useState(false);
-
+  const [val1, sv1] = useState(null);
+  const [val2, sv2] = useState(null);
   const search1 = async (val) => {
     const after_link = new URLSearchParams({
       q: val,
@@ -44,14 +46,14 @@ function Home({ set1, set2 }) {
 
   useEffect(() => {
     AOS.init();
-  },[]);
-  const restet = ()=>{
-    setLoc1(null)
+  }, []);
+  const restet = () => {
+    setLoc1(null);
     setLoc2(null);
-    setGata(false)
+    setGata(false);
     setLocs1([]);
     setLocs2([]);
-  }
+  };
   return (
     <div className="main">
       <div className="home">
@@ -70,7 +72,8 @@ function Home({ set1, set2 }) {
       </div>
       <div className="top">
         <div className="input_grup">
-          <input type="text" onChange={(e) => search1(e.target.value)} />
+          <input type="text" onChange={(e) => sv1(e.target.value)} />
+          <button onClick={() => search1(val1)}>search</button>
           <div className="maps">
             {locs1 &&
               !loc1 &&
@@ -88,7 +91,8 @@ function Home({ set1, set2 }) {
         </div>
         {loc1 && (
           <div className="input_group">
-            <input type="text" onChange={(e) => search2(e.target.value)} />
+            <input type="text" onChange={(e) => sv2(e.target.value)} />
+            <button onClick={() => search2(val2)}>search</button>
             <div className="maps">
               {locs2 &&
                 !loc2 &&
@@ -108,9 +112,13 @@ function Home({ set1, set2 }) {
         <button onClick={search}>Search</button>
         <button onClick={restet}>Reset</button>
       </div>
-      {gata && <>
-      <Test from={loc1} to={loc2} />
-      </>}
+      <Trafic from={loc1} to={loc2} />
+
+      {gata && (
+        <>
+          <Test from={loc1} to={loc2} />
+        </>
+      )}
     </div>
   );
 }
