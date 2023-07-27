@@ -24,10 +24,10 @@ function Home({ set1, set2 }) {
       polygon: true,
       polygon_geojson: 0,
     }).toString();
-    console.log(after_link);
+    ////console.log(after_link);
     const link = `https://nominatim.openstreetmap.org/search?${after_link}`;
     axios.get(link).then((res) => {
-      console.log(res);
+      //console.log(res);
       setLocs1(res.data);
     });
   };
@@ -48,7 +48,7 @@ function Home({ set1, set2 }) {
   };
 
   const search = () => {
-    console.log(loc1, loc2);
+    //console.log(loc1, loc2);
     if (loc1 && loc2) {
       set1(loc1);
       set2(loc2);
@@ -93,7 +93,9 @@ function Home({ set1, set2 }) {
         </a>
       </div>
       <div className="top" id="nu">
-        <div className="input_grup">
+        <div className="input_grup"
+            style={{ width: "100%", maxWidth: "532px" }}
+            >
           <input type="text" onChange={(e) => sv1(e.target.value)} />
           <button onClick={() => search1(val1)}>cauta prima locatie</button>
           <div className="maps">

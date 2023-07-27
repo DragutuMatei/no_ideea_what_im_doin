@@ -6,7 +6,7 @@ import { Timestamp } from "firebase/firestore";
 const fire = new Fire();
 let poate = { lat: 0, lng: 0 };
 function Trafic({ from, to }) {
-  console.log(from, to);
+  //console.log(from, to);
   const [user, loading, error] = useAuthState(fire.getuser());
   let [data, setData] = useState({
     user: !loading && user ? user.email : "",
@@ -22,7 +22,7 @@ function Trafic({ from, to }) {
   const get = async () => {
     
     const fromto = `${from}-${to}`;
-    console.log(fromto);
+    //console.log(fromto);
     const a = await fire.readDocuments("trafic", ["path", "==", fromto]);
     let me = 0;
     if (a.length != 0) {
@@ -43,7 +43,7 @@ function Trafic({ from, to }) {
         } else {
           setis(false)
           // await fire.deleteDocument("trafic", el.id).then(res=>{
-          //   console.log(res);
+          //   //console.log(res);
           // })
           console.log("S-AU STERS! AYAYE:)");
         }
@@ -84,7 +84,7 @@ function Trafic({ from, to }) {
     if (!loading && user) {
       setis(true);
       await fire.addItem("trafic", data).then((res) => {
-        console.log(res);
+        //console.log(res);
         alert("trafic anuntat");
       });
     } else if (!user) alert("trebuie sa te loghezi!");
@@ -97,7 +97,7 @@ function Trafic({ from, to }) {
         "==",
         user.email,
       ]);
-      console.log(docc);
+      //console.log(docc);
       await fire.deleteDocument("trafic", docc[0].id).then((res) => {
         alert("trafic sters");
       });
