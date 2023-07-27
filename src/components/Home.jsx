@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -46,6 +46,7 @@ function Home({ set1, set2 }) {
       setLocs2(res.data);
     });
   };
+
   const search = () => {
     console.log(loc1, loc2);
     if (loc1 && loc2) {
@@ -54,7 +55,6 @@ function Home({ set1, set2 }) {
       setGata(true);
     }
   };
-
   useEffect(() => {
     AOS.init();
   }, []);
@@ -112,7 +112,10 @@ function Home({ set1, set2 }) {
           </div>
         </div>
         {loc1 && (
-          <div className="input_group" style={{width: "100%",maxWidth: "532px"}}>
+          <div
+            className="input_group"
+            style={{ width: "100%", maxWidth: "532px" }}
+          >
             <input type="text" onChange={(e) => sv2(e.target.value)} />
             <button onClick={() => search2(val2)}>cauta a doua locatie</button>
             <div className="maps">
@@ -132,14 +135,16 @@ function Home({ set1, set2 }) {
           </div>
         )}
         <button onClick={search}>Search</button>
-        <button onClick={restet}>Reset</button>
       </div>
 
       {gata && (
         <>
           <Test from={loc1} to={loc2} />
           {user && !loading && (
-            <Trafic from={loc1?.display_name} to={loc2?.display_name} />
+            <>
+              <Trafic from={loc1?.display_name} to={loc2?.display_name} />
+              <button onClick={restet}>Reset</button>
+            </>
           )}
         </>
       )}

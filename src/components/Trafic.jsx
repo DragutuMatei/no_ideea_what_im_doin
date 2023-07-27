@@ -20,6 +20,7 @@ function Trafic({ from, to }) {
   const [medie, setMedie] = useState(0);
   const [is, setis] = useState(false);
   const get = async () => {
+    
     const fromto = `${from}-${to}`;
     console.log(fromto);
     const a = await fire.readDocuments("trafic", ["path", "==", fromto]);
@@ -50,6 +51,7 @@ function Trafic({ from, to }) {
     }
   };
   useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
     get();
     const getLocation = () => {
       if (navigator.geolocation) {

@@ -88,11 +88,11 @@ const Test = ({ from, to }) => {
     const clusters = kMeans(points, numberOfClusters);
     console.log("lusters", clusters);
 
-    clusters.forEach(e=>{
-        e.forEach(s=>{
-            L.circle([s[0], s[1]], 100).addTo(map);
-        })
-    })
+    // clusters.forEach(e=>{
+    //     e.forEach(s=>{
+    //         L.circle([s[0], s[1]], 100).addTo(map);
+    //     })
+    // })
 
     return () => {
       if (routingControl) {
@@ -143,14 +143,13 @@ const Test = ({ from, to }) => {
   }
 
   function kMeans(points, k, maxIterations = 100) {
-    let centroids = points.slice(0, k); // Initialize centroids with the first k points
+    let centroids = points.slice(0, k); 
     let iteration = 0;
 
     while (iteration < maxIterations) {
       const clusters = assignPointsToClusters(points, centroids);
       const newCentroids = calculateCentroids(clusters);
 
-      // Check for convergence
       if (JSON.stringify(newCentroids) === JSON.stringify(centroids)) {
         break;
       }
