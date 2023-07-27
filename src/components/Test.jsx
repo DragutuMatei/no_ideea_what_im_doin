@@ -80,14 +80,23 @@
 // };
 
 // export default Test;
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import axios from "axios";
+import Fire from "../utils/Fire";
+const fire = new Fire();
 const Test = ({ from, to }) => {
-    console.log(from, to);
+  console.log(from, to);
+  const [traf, setTraf] = useState([]);
+  const get = async () => {
+    const fromto = `${from.toLowerCase()}-${to.toLowerCase()}`;
+    setTraf(await fire.readDocuments("trafic", ["path", "==", fromto]));
+  };
+  get();
+
   useEffect(() => {
     const map = L.map("map").setView([from.lat, from.lon], 11);
     const mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
@@ -101,15 +110,14 @@ const Test = ({ from, to }) => {
         "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
       iconSize: [70, 70],
     });
-
+    console.log(traf);
     const marker = L.marker([from.lat, from.lon], { icon: taxiIcon }).addTo(
       map
     );
     const marker2 = L.marker([to.lat, to.lon], { icon: taxiIcon }).addTo(map);
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(from.lat, from.lon), L.latLng(to.lat, to.lon)],
-    }) 
-      .addTo(map);
+    }).addTo(map);
 
     return () => {
       if (routingControl) {
@@ -118,8 +126,7 @@ const Test = ({ from, to }) => {
       map.off();
       map.remove();
     };
-  }, [from, to]); 
- 
+  }, [from, to]);
 
   return (
     <div

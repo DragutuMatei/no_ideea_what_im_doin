@@ -8,20 +8,11 @@ let poate = { lat: 0, lng: 0 };
 function Trafic({ from, to }) {
   const [user, loading, error] = useAuthState(fire.getuser());
   let [data, setData] = useState({
-    user: user.email,
-    path: `${from}-${to}`,
+    user: !loading && user ? user.email : "",
+    path: from && to ? `${from.toLowerCase()}-${to.toLowerCase()}`:"-",
     createdAt: Timestamp.now(),
     location: { lat: 0, lng: 0 },
-  });
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-  };
-
-  function success(pos) {
-    const crd = pos.coords;
-  }
+  }); 
 
   useEffect(() => {
     const getLocation = () => {
@@ -31,8 +22,8 @@ function Trafic({ from, to }) {
             const { latitude, longitude } = position.coords;
             setData({
               user: user.email,
+              path: `${from.toLowerCase()}-${to.toLowerCase()}`,
 
-              path: `${from}-${to}`,
               createdAt: Timestamp.now(),
               location: { lat: latitude, lng: longitude },
             });

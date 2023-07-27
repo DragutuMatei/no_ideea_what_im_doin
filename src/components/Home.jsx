@@ -18,10 +18,12 @@ function Home({ set1, set2 }) {
       q: val,
       format: "json",
       addessdetalis: 1,
-      polygon_geojson: 0,
+      polygon: true,
     }).toString();
-    const link = `https://nominatim.openstreetmap.org/search?${after_link}`;
+    console.log(after_link);
+    const link = `https://nominatim.openstreetmap.org/search?q=Tecuci&format=json&addessdetalis=1&polygon_geojson=0`;
     axios.get(link).then((res) => {
+      console.log(res);
       setLocs1(res.data);
     });
   };
@@ -30,10 +32,13 @@ function Home({ set1, set2 }) {
       q: val,
       format: "json",
       addessdetalis: 1,
-      polygon_geojson: 0,
+      polygon: true,
+      // polygon_geojson: 0,
     }).toString();
+    //q=Tecuci&format=json&addessdetalis=1&polygon=true
+    // https://nominatim.openstreetmap.org/search?q=Tecuci&format=json&addessdetalis=1&polygon=true
     const link = `https://nominatim.openstreetmap.org/search?${after_link}`;
-    axios.get(link).then((res) => {
+    axios.post(link).then((res) => {
       setLocs2(res.data);
     });
   };
@@ -69,11 +74,19 @@ function Home({ set1, set2 }) {
         <div className="right" data-aos="fade-left">
           <img src={require("../utils/home.svg").default} alt="" />
         </div>
+        <a href="#nu">
+          <img
+            data-aos="fade-down"
+            src={require("../utils/downbad.svg").default}
+            className="abs"
+            alt=""
+          />
+        </a>
       </div>
-      <div className="top">
+      <div className="top" id="nu">
         <div className="input_grup">
           <input type="text" onChange={(e) => sv1(e.target.value)} />
-          <button onClick={() => search1(val1)}>search</button>
+          <button onClick={() => search1(val1)}>cauta prima locatie</button>
           <div className="maps">
             {locs1 &&
               !loc1 &&
@@ -89,10 +102,10 @@ function Home({ set1, set2 }) {
               })}
           </div>
         </div>
-        {loc1 && (
+        {!loc1 && (
           <div className="input_group">
             <input type="text" onChange={(e) => sv2(e.target.value)} />
-            <button onClick={() => search2(val2)}>search</button>
+            <button onClick={() => search2(val2)}>cauta a doua locatie</button>
             <div className="maps">
               {locs2 &&
                 !loc2 &&
